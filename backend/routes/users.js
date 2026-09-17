@@ -9,8 +9,8 @@ import {
 const router = express.Router();
 
 router.get('/Utilizadores', QueryUsers);
-router.post('/Utilizadore', CreateUser);
-router.put('/Utilizadore/:id', EditUser);
-router.delete('/Utilizadore/:id', DeleteUser);
+router.post('/Utilizador', CreateUser);
+router.put('/Utilizador/:id', EditUser);
+router.delete('/Utilizador/:id', DeleteUser);
 
 export default router;
