@@ -7,15 +7,21 @@ import path from 'path';
 const app = express();
 
 // Importação das Rotas
+import customers from './routes/customers.js';
+import itemSales from './routes/itemSales.js';
+import products from './routes/products.js';
+import sales from './routes/sales.js';
+import users from './routes/users.js';
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Rotas
-app.use('/');
-app.use('/');
-app.use('/');
-app.use('/');
+app.use('/', customers);
+app.use('/', itemSales);
+app.use('/', products);
+app.use('/', sales);
+app.use('/', users);
 
 export default app;
