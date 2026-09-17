@@ -1,12 +1,17 @@
-const path = require('path');
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
 
-require("dotenv").config({
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({
     path: path.resolve(__dirname, "../.env")
 });
 
-const mysql = require('mysql2');
+import mysql from 'mysql2';
 
-const db = mysql.createConnection({
+export const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -22,5 +27,3 @@ db.connect((err) => {
         console.log('Conectado com sucesso.');
     }
 });
-
-module.exports = db;

@@ -1,9 +1,8 @@
 // Responsável por chamar as rotas e a porta a escutar...
-const path = require('path');
+import path from 'path';
+import dotenv from 'dotenv';
 
-require("dotenv").config({
-    path: path.resolve(__dirname, "../.env")
-});
+dotenv.config({ path: '../.env' });
 
 import app from './app.js';
 
@@ -12,6 +11,6 @@ const PORT = process.env.PORT || 3000;
 console.log('DB_USER: ', process.env.DB_USER);
 console.log('DB_PASSWORD: ', process.env.DB_PASSWORD);
 
-app.listem(PORT, () => {
+app.listen(PORT, () => {
     console.log(`App rodando em: http://localhost:${PORT}`);
 });

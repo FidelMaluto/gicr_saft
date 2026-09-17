@@ -4,7 +4,7 @@ import {
     CreateItemVenda,
     EditItemVenda,
     DeleteItemVenda
-} from '../controllers/itemSale';
+} from '../controllers/itemSale.js';
 
 const router = express.Router();
 
