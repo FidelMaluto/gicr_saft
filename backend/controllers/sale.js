@@ -15,17 +15,18 @@ export const QuerySale = async (req, res) => {
 };
 
 export const CreateSale = async (req, res) => {
-    const { formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido } = req.body;
+    const { formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido } = req.body;
 
-    db.query('INSERT INTO vendas(formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido) VALUES(?,?,?,?,?,?,?)',
-        [formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido], (err, data) => {
+    db.query(`INSERT INTO vendas(formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido) 
+        VALUES(?,?,?,?,?,?,?)`,
+        [formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido], (err, data) => {
             if (err) {
                 console.log();
                 return res.status(500).json({ message: 'Erro ao cadastrar venda: ', err })
             }
 
             return res.status(201).json({
-                id: data.insertId, formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido
+                id: data.insertId, formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido
             });
 
         });
@@ -33,18 +34,18 @@ export const CreateSale = async (req, res) => {
 
 export const EditSale = async (req, res) => {
     const { id } = req.params;
-    const { formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido } = req.body;
+    const { formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido } = req.body;
 
-    db.query(`UPDATE vendas SET formaPagamento = ?, Cliente = ?, totalVenda = ?, valorIVA = ?, utilizadorID = ?, 
-        dataVenda, = ? totalLiquido = ? WHERE id = ?`,
-        [formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido, id], (err, data) => {
+    db.query(`UPDATE vendas SET formaPagamento = ?, clienteID = ?, totalVenda = ?, valorIVA = ?, utilizadorID = ?, 
+        dataVenda = ?, totalLiquido = ? WHERE id = ?`,
+        [formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido, id], (err, data) => {
             if (err) {
                 console.log('Erro ao editar venda: ', err);
                 return res.status(500).json({ message: 'Erro ao editar venda: ', err });
             }
 
             return res.status(201).json({
-                id: data.insertId, formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido
+                id: data.insertId, formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido
             });
 
         });
@@ -53,7 +54,7 @@ export const EditSale = async (req, res) => {
 export const DeleteSale = async (req, res) => {
     const { id } = req.params;
 
-    db.query('DELETE vendas WHERE id = ?', [id], (err, data) => {
+    db.query('DELETE FROM vendas WHERE id = ?', [id], (err, data) => {
         if (err) {
             console.log('Erro ao deletar venda: ', err);
             return res.status(500).json({ message: 'Erro ao deletar venda: ', err });
