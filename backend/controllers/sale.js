@@ -21,8 +21,8 @@ export const CreateSale = async (req, res) => {
         VALUES(?,?,?,?,?,?,?)`,
         [formaPagamento, clienteID, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido], (err, data) => {
             if (err) {
-                console.log();
-                return res.status(500).json({ message: 'Erro ao cadastrar venda: ', err })
+                console.log('Erro ao cadastrar venda: ', err);
+                return res.status(500).json({ message: 'Erro ao cadastrar venda: ', err });
             }
 
             return res.status(201).json({

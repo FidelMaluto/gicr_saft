@@ -6,7 +6,7 @@ export const QueryUsers = async (req, res) => {
     db.query(queryAll, (err, data) => {
         if (err) {
             console.log('Erro ao consultar utilizadores: ', err);
-            return res.status(500).json({ message: 'erro ao consultar utilizadores: ', err });
+            return res.status(500).json({ message: 'Erro ao consultar utilizadores: ', err });
         }
 
         return res.status(200).json(data);
@@ -39,7 +39,7 @@ export const EditUser = async (req, res) => {
         [nome, email, senhaCifrada, cargo, id], (err, data) => {
             if (err) {
                 console.log('Erro ao editar utilizador: ', err);
-                return res.status(500).json({ message: 'Erro ao eeditar utilizador: ', err });
+                return res.status(500).json({ message: 'Erro ao editar utilizador: ', err });
             }
 
             return res.status(201).json({
