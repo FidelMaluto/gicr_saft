@@ -1,5 +1,4 @@
 // Responsável por chamar as rotas e a porta a escutar...
-import path from 'path';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: '../.env' });

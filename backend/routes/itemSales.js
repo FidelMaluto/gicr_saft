@@ -8,9 +8,9 @@ import {
 
 const router = express.Router();
 
-router.get('/itensVenda', QueryItemSale);
-router.post('/itensVenda', CreateItemVenda);
-router.put('/itensVenda/:id', EditItemVenda);
-router.delete('/itensVenda/:id', DeleteItemVenda);
+router.get('/ItensVenda', QueryItemSale);
+router.post('/ItensVenda', CreateItemVenda);
+router.put('/ItensVenda/:id', EditItemVenda);
+router.delete('/ItensVenda/:id', DeleteItemVenda);
 
 export default router
