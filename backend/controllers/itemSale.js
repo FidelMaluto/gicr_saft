@@ -35,7 +35,7 @@ export const EditItemVenda = async (req, res) => {
     const { id } = req.params;
     const { vendaID, produtoID, quantidade, precoUnitario } = req.body;
 
-    db.query(`UPDATE itens_venda SET vendaID = ?, produtoID = ?, quantidade = ?, precoUnitario = ?`,
+    db.query(`UPDATE itens_venda SET vendaID = ?, produtoID = ?, quantidade = ?, precoUnitario = ? WHERE id = ?`,
         [vendaID, produtoID, quantidade, precoUnitario, id], (err, data) => {
             if (err) {
                 console.log('Erro ao editar item: ', err);

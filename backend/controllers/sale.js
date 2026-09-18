@@ -35,7 +35,8 @@ export const EditSale = async (req, res) => {
     const { id } = req.params;
     const { formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido } = req.body;
 
-    db.query(`UPDATE vendas SET formaPagamento = ?, Cliente = ?, totalVenda = ?, valorIVA = ?, utilizadorID = ?, dataVenda, = ? totalLiquido = ? `,
+    db.query(`UPDATE vendas SET formaPagamento = ?, Cliente = ?, totalVenda = ?, valorIVA = ?, utilizadorID = ?, 
+        dataVenda, = ? totalLiquido = ? WHERE id = ?`,
         [formaPagamento, Cliente, totalVenda, valorIVA, utilizadorID, dataVenda, totalLiquido, id], (err, data) => {
             if (err) {
                 console.log('Erro ao editar venda: ', err);

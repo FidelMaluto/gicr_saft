@@ -35,7 +35,7 @@ export const EditUser = async (req, res) => {
     const { id } = req.params;
     const { nome, email, senhaCifrada, cargo } = req.bady;
 
-    db.query(`UPDATE utilizadores SET nome = ?, email = ?, senhaCifrada = ?, cargo = ?`,
+    db.query(`UPDATE utilizadores SET nome = ?, email = ?, senhaCifrada = ?, cargo = ? WHERE id = ?`,
         [nome, email, senhaCifrada, cargo, id], (err, data) => {
             if (err) {
                 console.log('Erro ao editar utilizador: ', err);

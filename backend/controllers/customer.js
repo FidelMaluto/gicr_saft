@@ -37,7 +37,7 @@ export const EditCustomer = async (req, res) => {
     const { id } = req.params;
     const { nome, nif, telefone, email } = req.body;
 
-    db.query('UPDATE clientes SET nome = ?, nif = ?, telefone = ?, email = ?',
+    db.query('UPDATE clientes SET nome = ?, nif = ?, telefone = ?, email = ? WHERE id = ?',
         [nome, nif, telefone, email, id], (err, data) => {
             if (err) {
                 console.log('Erro ao editar cliente: ', err);
