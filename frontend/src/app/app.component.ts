@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: false,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'sgicr_saft';
+  title = 'Sistema de Gestão de Inventário e Vendas';
+
+  // Público para poder ser usado diretamente no template (*ngIf="authService.isLoggedIn()")
+  constructor(public authService: AuthService) {}
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

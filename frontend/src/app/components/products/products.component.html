@@ -1,0 +1,95 @@
+<div class="container-fluid py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestão de Produtos</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal" (click)="openNewProductModal()">
+      + Novo Produto
+    </button>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ successMessage }}
+    <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Nome</th>
+            <th class="text-end">Preço (Kz)</th>
+            <th class="text-end">Stock</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>{{ product.name }}</td>
+            <td class="text-end">{{ product.price | number:'1.2-2' }}</td>
+            <td class="text-end">
+              <span class="badge" [ngClass]="product.stock > 0 ? 'bg-success' : 'bg-danger'">
+                {{ product.stock }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-secondary me-1"
+                      data-bs-toggle="modal" data-bs-target="#productModal"
+                      (click)="editProduct(product)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(product.id)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="products.length === 0">
+            <td colspan="4" class="text-center text-muted py-4">Nenhum produto registado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo / Editar Produto -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditing ? 'Editar Produto' : 'Novo Produto' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-control" [(ngModel)]="newProduct.name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <textarea class="form-control" [(ngModel)]="newProduct.description" name="description" rows="2"></textarea>
+          </div>
+          <div class="row">
+            <div class="col-6 mb-3">
+              <label class="form-label">Preço (Kz)</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.price" name="price" min="0" step="0.01">
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label">Stock</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.stock" name="stock" min="0">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="saveProduct()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

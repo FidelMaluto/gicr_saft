@@ -1,0 +1,99 @@
+<div class="container-fluid py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestão de Utilizadores</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" (click)="openNewUserModal()">
+      + Novo Utilizador
+    </button>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ successMessage }}
+    <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+  </div>
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th class="text-end">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="badge" [ngClass]="user.role === 'admin' ? 'bg-primary' : 'bg-secondary'">
+                {{ user.role }}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-secondary me-1"
+                      data-bs-toggle="modal" data-bs-target="#userModal"
+                      (click)="editUser(user)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="users.length === 0">
+            <td colspan="4" class="text-center text-muted py-4">Nenhum utilizador registado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo / Editar Utilizador -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditing ? 'Editar Utilizador' : 'Novo Utilizador' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" [(ngModel)]="newUser.email" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">
+              Password
+              <small *ngIf="isEditing" class="text-muted">(deixe em branco para manter a atual)</small>
+            </label>
+            <input type="password" class="form-control" [(ngModel)]="newUser.password" name="password">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Perfil</label>
+            <select class="form-select" [(ngModel)]="newUser.role" name="role">
+              <option value="admin">Administrador</option>
+              <option value="vendedor">Vendedor</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="saveUser()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

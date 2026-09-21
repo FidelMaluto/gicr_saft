@@ -3,13 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sgicr_saft": {
+    "frontend": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -17,14 +13,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/sgicr_saft",
+            "outputPath": "dist/frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -32,9 +27,12 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -64,10 +62,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sgicr_saft:build:production"
+              "buildTarget": "frontend:build:production"
             },
             "development": {
-              "buildTarget": "sgicr_saft:build:development"
+              "buildTarget": "frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +81,6 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -91,9 +88,12 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           }
         }
       }
