@@ -4,10 +4,8 @@
  */
 export interface ItemSale {
   id?: number;
-  sale_id?: number;       // Preenchido pelo back-end após a venda ser criada
-  product_id: number;      // FK para o produto vendido
-  product_name?: string;   // Usado apenas no front-end para exibição no carrinho
-  quantity: number;        // Quantidade vendida
-  unit_price: number;      // Preço unitário no momento da venda
-  subtotal: number;        // quantity * unit_price
+  vendaID?: number;       // Preenchido pelo back-end após a venda ser criada
+  produtoID: number;  // Usado apenas no front-end para exibição no carrinho
+  quantidade: number;        // Quantidade vendida
+  precoUnitario: number;     // quantity * unit_price
 }

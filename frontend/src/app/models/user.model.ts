@@ -4,8 +4,8 @@
  */
 export interface User {
   id?: number;
-  name: string;
+  nome: string;
   email: string;
-  password?: string;  // Nunca deve ser exposto/guardado no front-end após login
-  role?: string;       // Ex.: 'admin', 'vendedor'
+  senhaCifrada?: string;  // Nunca deve ser exposto/guardado no front-end após login
+  cargo?: string;       // Ex.: 'admin', 'vendedor'
 }

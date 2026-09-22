@@ -4,9 +4,8 @@
  */
 export interface Customer {
   id?: number;
-  name: string;      // Nome do cliente
+  nome: string;      // Nome do cliente
   nif: string;        // Número de Identificação Fiscal (obrigatório em Angola)
+  telefone?: string;
   email?: string;
-  phone?: string;
-  address?: string;
 }

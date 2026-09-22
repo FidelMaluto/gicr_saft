@@ -4,8 +4,12 @@
  */
 export interface Product {
   id?: number;
-  name: string;         // Nome/descrição curta do produto
-  price: number;         // Preço unitário (Kz) sem IVA
-  stock: number;         // Quantidade disponível em inventário
-  description?: string;  // Descrição detalhada (opcional)
+  nome: string;         // Nome/descrição curta do produto
+  codigoBarra: number;         // Preço unitário (Kz) sem IVA
+  precoVenda: number;         // Quantidade disponível em inventário
+  stockAtual: number;  // Descrição detalhada (opcional)
+  stockMinimo: number;
+  precoCusto: number;
+  regimeIVA: number;
+  estado?: string;
 }

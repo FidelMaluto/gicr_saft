@@ -11,10 +11,11 @@ import { ItemSale } from './item-sale.model';
  */
 export interface Sale {
   id?: number;
-  customer_id: number;
-  date?: string;          // Definido pelo back-end (ou opcionalmente enviado pelo front)
-  total_bruto: number;
-  iva: number;
-  total_liquido: number;
-  items: ItemSale[];
+  formaPagamento?: string;
+  clienteID?: number;          // Definido pelo back-end (ou opcionalmente enviado pelo front)
+  totalVenda: number;
+  valorIVA: number;
+  utilizadorID: number;
+  dataVenda?: string;
+  totalLiquido: number;
 }

@@ -17,7 +17,7 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'http://localhost:3000/utilizadores';
 
   constructor(private http: HttpClient) {}
 

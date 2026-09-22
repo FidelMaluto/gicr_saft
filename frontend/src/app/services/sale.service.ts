@@ -19,7 +19,7 @@ import { Sale } from '../models/sale.model';
   providedIn: 'root'
 })
 export class SaleService {
-  private apiUrl = 'http://localhost:3000/sales';
+  private apiUrl = 'http://localhost:3000/vendas';
 
   constructor(private http: HttpClient) {}
 
