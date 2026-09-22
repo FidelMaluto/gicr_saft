@@ -34,13 +34,13 @@ export class CustomersComponent implements OnInit {
   }
 
   private emptyCustomer(): Customer {
-    return { name: '', nif: '', email: '', phone: '', address: '' };
+    return { nome: '', nif: '', telefone: '', email: '' };
   }
 
   addCustomer(): void {
     this.errorMessage = '';
 
-    if (!this.newCustomer.name || !this.newCustomer.nif) {
+    if (!this.newCustomer.nome || !this.newCustomer.nif) {
       this.errorMessage = 'Nome e NIF são obrigatórios.';
       return;
     }

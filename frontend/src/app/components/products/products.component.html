@@ -29,11 +29,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let product of products">
-            <td>{{ product.name }}</td>
-            <td class="text-end">{{ product.price | number:'1.2-2' }}</td>
+            <td>{{ product.nome }}</td>
+            <td class="text-end">{{ product.precoVenda | number:'1.2-2' }}</td>
             <td class="text-end">
-              <span class="badge" [ngClass]="product.stock > 0 ? 'bg-success' : 'bg-danger'">
-                {{ product.stock }}
+              <span class="badge" [ngClass]="product.stockAtual > 0 ? 'bg-success' : 'bg-danger'">
+                {{ product.stockAtual }}
               </span>
             </td>
             <td class="text-end">
@@ -68,20 +68,35 @@
         <form>
           <div class="mb-3">
             <label class="form-label">Nome</label>
-            <input type="text" class="form-control" [(ngModel)]="newProduct.name" name="name" required>
+            <input type="text" class="form-control" [(ngModel)]="newProduct.nome" name="nome" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Descrição</label>
-            <textarea class="form-control" [(ngModel)]="newProduct.description" name="description" rows="2"></textarea>
+            <input class="form-control" [(ngModel)]="newProduct.codigoBarra" name="codigoBarra" rows="2">
           </div>
           <div class="row">
             <div class="col-6 mb-3">
-              <label class="form-label">Preço (Kz)</label>
-              <input type="number" class="form-control" [(ngModel)]="newProduct.price" name="price" min="0" step="0.01">
+              <label class="form-label">Preço - Venda (Kz)</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.precoVenda" name="precoVenda" min="0" step="0.01">
             </div>
             <div class="col-6 mb-3">
-              <label class="form-label">Stock</label>
-              <input type="number" class="form-control" [(ngModel)]="newProduct.stock" name="stock" min="0">
+              <label class="form-label">Stock-Atual</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.stockAtual" name="stockAtual" min="0">
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label">Stock-Mínimo</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.stockMinimo" name="stockMinimo" min="0">
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label">Preço - Custo (Kz)</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.precoCusto" name="precoCusto" min="0" step="0.01">
+            </div>
+            <div class="col-6 mb-3">
+              <label class="form-label">Regime - IVA</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.regimeIVA" name="regimeIVA" min="0" step="0.01">
+            </div><div class="col-6 mb-3">
+              <label class="form-label">Estado</label>
+              <input type="text" class="form-control" [(ngModel)]="newProduct.estado" name="estado" min="0" step="0.01">
             </div>
           </div>
         </form>

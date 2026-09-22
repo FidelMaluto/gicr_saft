@@ -16,7 +16,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   email = '';
-  password = '';
+  senhaCifrada = '';
   isLoading = false;
   errorMessage = '';
 
@@ -29,13 +29,13 @@ export class LoginComponent {
   onSubmit(): void {
     this.errorMessage = '';
 
-    if (!this.email || !this.password) {
+    if (!this.email || !this.senhaCifrada) {
       this.errorMessage = 'Indique o email e a password.';
       return;
     }
 
     this.isLoading = true;
-    this.userService.login(this.email, this.password).subscribe({
+    this.userService.login(this.email, this.senhaCifrada).subscribe({
       next: (user) => {
         this.authService.setCurrentUser(user);
         this.isLoading = false;

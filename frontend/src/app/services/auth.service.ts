@@ -23,7 +23,7 @@ export class AuthService {
 
   /** Guarda o utilizador autenticado após um login bem-sucedido */
   setCurrentUser(user: User): void {
-    const { password, ...safeUser } = user; // nunca persistir a password no cliente
+    const { senhaCifrada, ...safeUser } = user; // nunca persistir a password no cliente
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(safeUser));
   }
 

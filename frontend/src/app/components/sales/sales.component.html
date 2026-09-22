@@ -21,7 +21,7 @@
           <select class="form-select" [(ngModel)]="selectedCustomerId" name="customer">
             <option [ngValue]="null" disabled>-- Selecione um cliente --</option>
             <option *ngFor="let c of customers" [ngValue]="c.id">
-              {{ c.name }} (NIF: {{ c.nif }})
+              {{ c.nome }} (NIF: {{ c.nif }})
             </option>
           </select>
         </div>
@@ -35,14 +35,14 @@
               <label class="form-label">Produto</label>
               <select class="form-select" [(ngModel)]="selectedProductId" name="product">
                 <option [ngValue]="null" disabled>-- Selecione um produto --</option>
-                <option *ngFor="let p of products" [ngValue]="p.id" [disabled]="p.stock === 0">
-                  {{ p.name }} — {{ p.price | number:'1.2-2' }} Kz (Stock: {{ p.stock }})
+                <option *ngFor="let p of products" [ngValue]="p.id" [disabled]="p.stockAtual === 0">
+                  {{ p.nome }} — {{ p.precoVenda | number:'1.2-2' }} Kz (Stock: {{ p.stockAtual }})
                 </option>
               </select>
             </div>
             <div class="col-md-3">
               <label class="form-label">Quantidade</label>
-              <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" min="1">
+              <input type="number" class="form-control" [(ngModel)]="quantidade" name="quantity" min="1">
             </div>
             <div class="col-md-3">
               <button class="btn btn-success w-100" (click)="addToCart()">
@@ -74,10 +74,10 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of cart; let i = index">
-                  <td>{{ item.product_name }}</td>
-                  <td class="text-end">{{ item.quantity }}</td>
-                  <td class="text-end">{{ item.unit_price | number:'1.2-2' }}</td>
-                  <td class="text-end">{{ item.subtotal | number:'1.2-2' }}</td>
+                  <!-- <td>{{ item.product_name }}</td> -->
+                  <td class="text-end">{{ item.quantidade }}</td>
+                  <td class="text-end">{{ item.precoUnitario | number:'1.2-2' }}</td>
+                  <!-- <td class="text-end">{{ item.subtotal | number:'1.2-2' }}</td> -->
                   <td class="text-end">
                     <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(i)" title="Remover">
                       &times;

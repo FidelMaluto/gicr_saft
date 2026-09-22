@@ -38,7 +38,7 @@ export class UsersComponent implements OnInit {
   }
 
   private emptyUser(): User {
-    return { name: '', email: '', password: '', role: 'vendedor' };
+    return { nome: '', email: '', senhaCifrada: '', cargo: 'vendedor' };
   }
 
   openNewUserModal(): void {
@@ -51,17 +51,17 @@ export class UsersComponent implements OnInit {
     this.isEditing = true;
     this.editingId = user.id ?? null;
     // Não pré-preenchemos a password por segurança — fica vazia até o utilizador decidir alterá-la
-    this.newUser = { ...user, password: '' };
+    this.newUser = { ...user, senhaCifrada: '' };
   }
 
   saveUser(): void {
     this.errorMessage = '';
 
-    if (!this.newUser.name || !this.newUser.email) {
+    if (!this.newUser.nome || !this.newUser.email) {
       this.errorMessage = 'Nome e email são obrigatórios.';
       return;
     }
-    if (!this.isEditing && !this.newUser.password) {
+    if (!this.isEditing && !this.newUser.senhaCifrada) {
       this.errorMessage = 'A password é obrigatória para novos utilizadores.';
       return;
     }
@@ -69,8 +69,8 @@ export class UsersComponent implements OnInit {
     if (this.isEditing && this.editingId) {
       // Se a password ficou vazia durante a edição, não a enviamos (mantém a atual no back-end)
       const payload: User = { ...this.newUser };
-      if (!payload.password) {
-        delete payload.password;
+      if (!payload.senhaCifrada) {
+        delete payload.senhaCifrada;
       }
 
       this.userService.update(this.editingId, payload).subscribe({

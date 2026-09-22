@@ -7,11 +7,11 @@
     </button>
   </div>
 
-  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" cargo="alert">
     {{ successMessage }}
     <button type="button" class="btn-close" (click)="successMessage = ''"></button>
   </div>
-  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" cargo="alert">
     {{ errorMessage }}
     <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
   </div>
@@ -23,17 +23,17 @@
           <tr>
             <th>Nome</th>
             <th>Email</th>
-            <th>Perfil</th>
+            <th>Cargo</th>
             <th class="text-end">Ações</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let user of users">
-            <td>{{ user.name }}</td>
+            <td>{{ user.nome }}</td>
             <td>{{ user.email }}</td>
             <td>
-              <span class="badge" [ngClass]="user.role === 'admin' ? 'bg-primary' : 'bg-secondary'">
-                {{ user.role }}
+              <span class="badge" [ngClass]="user.cargo === 'admin' ? 'bg-primary' : 'bg-secondary'">
+                {{ user.cargo }}
               </span>
             </td>
             <td class="text-end">
@@ -68,7 +68,7 @@
         <form>
           <div class="mb-3">
             <label class="form-label">Nome</label>
-            <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name" required>
+            <input type="text" class="form-control" [(ngModel)]="newUser.nome" name="nome" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Email</label>
@@ -76,14 +76,14 @@
           </div>
           <div class="mb-3">
             <label class="form-label">
-              Password
+              Palavra-Passe
               <small *ngIf="isEditing" class="text-muted">(deixe em branco para manter a atual)</small>
             </label>
-            <input type="password" class="form-control" [(ngModel)]="newUser.password" name="password">
+            <input type="password" class="form-control" [(ngModel)]="newUser.senhaCifrada" name="senhaCifrada">
           </div>
           <div class="mb-3">
-            <label class="form-label">Perfil</label>
-            <select class="form-select" [(ngModel)]="newUser.role" name="role">
+            <label class="form-label">Cargo</label>
+            <select class="form-select" [(ngModel)]="newUser.cargo" name="cargo">
               <option value="admin">Administrador</option>
               <option value="vendedor">Vendedor</option>
             </select>

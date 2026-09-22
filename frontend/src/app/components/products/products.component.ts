@@ -37,7 +37,16 @@ export class ProductsComponent implements OnInit {
   }
 
   private emptyProduct(): Product {
-    return { name: '', price: 0, stock: 0, description: '' };
+    return { 
+      nome: '', 
+      codigoBarra: 0, 
+      precoVenda: 0, 
+      stockAtual: 0, 
+      stockMinimo: 0, 
+      precoCusto: 0,
+      regimeIVA: 14,
+      estado: 'Ativo'
+    };
   }
 
   /** Prepara o modal para criação de um novo produto */
@@ -58,7 +67,7 @@ export class ProductsComponent implements OnInit {
   saveProduct(): void {
     this.errorMessage = '';
 
-    if (!this.newProduct.name || this.newProduct.price < 0 || this.newProduct.stock < 0) {
+    if (!this.newProduct.nome || this.newProduct.precoVenda < 0 || this.newProduct.stockAtual < 0) {
       this.errorMessage = 'Preencha corretamente o nome, preço e stock do produto.';
       return;
     }

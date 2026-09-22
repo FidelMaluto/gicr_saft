@@ -19,23 +19,19 @@
           <form (ngSubmit)="addCustomer()">
             <div class="mb-3">
               <label class="form-label">Nome</label>
-              <input type="text" class="form-control" [(ngModel)]="newCustomer.name" name="name" required>
+              <input type="text" class="form-control" [(ngModel)]="newCustomer.nome" name="nome" required>
             </div>
             <div class="mb-3">
               <label class="form-label">NIF</label>
               <input type="text" class="form-control" [(ngModel)]="newCustomer.nif" name="nif" required>
             </div>
             <div class="mb-3">
+              <label class="form-label">Telefone</label>
+              <input type="text" class="form-control" [(ngModel)]="newCustomer.telefone" name="telefone">
+            </div>
+            <div class="mb-3">
               <label class="form-label">Email</label>
               <input type="email" class="form-control" [(ngModel)]="newCustomer.email" name="email">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Telefone</label>
-              <input type="text" class="form-control" [(ngModel)]="newCustomer.phone" name="phone">
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Endereço</label>
-              <input type="text" class="form-control" [(ngModel)]="newCustomer.address" name="address">
             </div>
             <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
           </form>
@@ -59,10 +55,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let customer of customers">
-                <td>{{ customer.name }}</td>
+                <td>{{ customer.nome }}</td>
                 <td>{{ customer.nif }}</td>
+                <td>{{ customer.telefone }}</td>
                 <td>{{ customer.email }}</td>
-                <td>{{ customer.phone }}</td>
                 <td class="text-end">
                   <button class="btn btn-sm btn-outline-danger" (click)="deleteCustomer(customer.id)">
                     Eliminar

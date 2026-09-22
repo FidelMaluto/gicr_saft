@@ -30,7 +30,7 @@ export class SalesComponent implements OnInit {
 
   selectedCustomerId: number | null = null;
   selectedProductId: number | null = null;
-  quantity = 1;
+  quantidade = 1;
 
   cart: ItemSale[] = [];
 
@@ -70,7 +70,7 @@ export class SalesComponent implements OnInit {
   addToCart(): void {
     this.errorMessage = '';
 
-    if (!this.selectedProductId || this.quantity <= 0) {
+    if (!this.selectedProductId || this.quantidade <= 0) {
       this.errorMessage = 'Selecione um produto e indique uma quantidade válida.';
       return;
     }
@@ -83,29 +83,29 @@ export class SalesComponent implements OnInit {
 
     // Quantidade já existente no carrinho para este produto (evita ultrapassar o stock)
     const existing = this.cart.find((i) => i.product_id === product.id);
-    const quantidadeJaNoCarrinho = existing ? existing.quantity : 0;
+    const quantidadeJaNoCarrinho = existing ? existing.quantidade : 0;
 
-    if (this.quantity + quantidadeJaNoCarrinho > (product.stock ?? 0)) {
+    if (this.quantidade + quantidadeJaNoCarrinho > (product.stock ?? 0)) {
       this.errorMessage = `Stock insuficiente para "${product.name}". Disponível: ${product.stock}`;
       return;
     }
 
     if (existing) {
-      existing.quantity += this.quantity;
-      existing.subtotal = existing.quantity * existing.unit_price;
+      existing.quantidade += this.quantidade;
+      existing.subtotal = existing.quantidade * existing.unit_price;
     } else {
       this.cart.push({
         product_id: product.id!,
         product_name: product.name,
-        quantity: this.quantity,
+        quantidade: this.quantidade,
         unit_price: product.price,
-        subtotal: this.quantity * product.price
+        subtotal: this.quantidade * product.price
       });
     }
 
     // Repõe os campos de seleção
     this.selectedProductId = null;
-    this.quantity = 1;
+    this.quantidade = 1;
   }
 
   removeFromCart(index: number): void {
