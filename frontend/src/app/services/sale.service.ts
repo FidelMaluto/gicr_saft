@@ -4,37 +4,32 @@ import { Observable } from 'rxjs';
 import { Sale } from '../models/sale.model';
 
 /**
- * Serviço responsável pela comunicação com a rota /sales do back-end.
- * O objeto Sale enviado no create() já vem com os totais calculados
- * (total_bruto, iva, total_liquido) e o array de items — cabe ao
- * back-end persistir a venda e os respetivos itemSales, além de
- * atualizar o stock dos produtos envolvidos.
- *
- * Endpoints REST assumidos:
- *   GET  /sales
- *   GET  /sales/:id
- *   POST /sales
+ * Comunicação com routes/sales.js:
+ *   GET    /Vendas
+ *   POST   /Venda   (cria APENAS o cabeçalho da venda — os itens vão
+ *                     separadamente para /ItensVenda, ver ItemSaleService)
+ *   PUT    /Venda/:id
+ *   DELETE /Venda/:id
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class SaleService {
-  private apiUrl = 'http://localhost:3000/vendas';
+  private apiUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  /** Lista o histórico de vendas */
   getAll(): Observable<Sale[]> {
-    return this.http.get<Sale[]>(this.apiUrl);
+    return this.http.get<Sale[]>(`${this.apiUrl}/Vendas`);
   }
 
-  /** Obtém o detalhe de uma venda pelo ID */
-  getById(id: number): Observable<Sale> {
-    return this.http.get<Sale>(`${this.apiUrl}/${id}`);
-  }
-
-  /** Regista/finaliza uma nova venda (envia cabeçalho + itens) */
   create(sale: Sale): Observable<Sale> {
-    return this.http.post<Sale>(this.apiUrl, sale);
+    return this.http.post<Sale>(`${this.apiUrl}/Venda`, sale);
+  }
+
+  update(id: number, sale: Sale): Observable<Sale> {
+    return this.http.put<Sale>(`${this.apiUrl}/Venda/${id}`, sale);
+  }
+
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/Venda/${id}`);
   }
 }

@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
 
-/**
- * Componente de Gestão de Produtos (Inventário).
- * Lista os produtos numa tabela Bootstrap e permite criar/editar/eliminar
- * através de um modal Bootstrap com formulário controlado por ngModel.
- */
 @Component({
   selector: 'app-products',
   standalone: false,
@@ -15,6 +10,9 @@ import { ProductService } from '../../services/product.service';
 })
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
+
+  readonly regimesIVA = ['Regime Geral', 'Regime Simplificado', 'Isento'];
+  readonly estados = ['Ativo', 'Inativo'];
 
   newProduct: Product = this.emptyProduct();
   isEditing = false;
@@ -37,33 +35,30 @@ export class ProductsComponent implements OnInit {
   }
 
   private emptyProduct(): Product {
-    return { 
-      nome: '', 
-      codigoBarra: 0, 
-      precoVenda: 0, 
-      stockAtual: 0, 
-      stockMinimo: 0, 
+    return {
+      nome: '',
+      codigoBarra: '',
+      precoVenda: 0,
+      stockAtual: 0,
+      stockMinimo: 0,
       precoCusto: 0,
-      regimeIVA: 14,
+      regimeIVA: 'Regime Geral',
       estado: 'Ativo'
     };
   }
 
-  /** Prepara o modal para criação de um novo produto */
   openNewProductModal(): void {
     this.isEditing = false;
     this.editingId = null;
     this.newProduct = this.emptyProduct();
   }
 
-  /** Prepara o modal com os dados do produto a editar */
   editProduct(product: Product): void {
     this.isEditing = true;
     this.editingId = product.id ?? null;
     this.newProduct = { ...product };
   }
 
-  /** Cria ou atualiza o produto, conforme o modo atual do formulário */
   saveProduct(): void {
     this.errorMessage = '';
 

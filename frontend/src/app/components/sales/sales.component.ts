@@ -6,17 +6,22 @@ import { Sale } from '../../models/sale.model';
 import { CustomerService } from '../../services/customer.service';
 import { ProductService } from '../../services/product.service';
 import { SaleService } from '../../services/sale.service';
+import { ItemSaleService } from '../../services/item-sale.service';
+import { AuthService } from '../../services/auth.service';
 
 /**
  * Componente Ponto de Venda (PDV).
  *
- * Fluxo:
- *  1. Utilizador seleciona um cliente.
- *  2. Utilizador seleciona um produto + quantidade e adiciona ao carrinho.
- *  3. Os totais (Bruto, IVA 14%, Líquido) são recalculados automaticamente
- *     através dos getters totalBruto / iva / totalLiquido.
- *  4. Ao clicar em "Finalizar Venda", envia-se o objeto Sale completo
- *     (customer_id, totais e items[]) para a API /sales.
+ * Como o back-end separa a venda (tabela `vendas`) dos itens
+ * (tabela `itens_venda`) em endpoints diferentes, finalizar uma venda
+ * é uma operação em 3 passos, feita aqui em sequência:
+ *   1. POST /Venda            -> cria o cabeçalho e devolve o `id`
+ *   2. POST /ItensVenda (x N) -> cria uma linha por produto no carrinho
+ *   3. PUT  /Produto/:id (xN) -> decrementa o stockAtual de cada produto
+ *
+ * Não há transação atómica no back-end atual — se um passo falhar a meio,
+ * a venda pode ficar parcialmente registada. Fica assinalado no ecrã e
+ * na consola quando isso acontece, para correção manual se necessário.
  */
 @Component({
   selector: 'app-sales',
@@ -30,11 +35,13 @@ export class SalesComponent implements OnInit {
 
   selectedCustomerId: number | null = null;
   selectedProductId: number | null = null;
-  quantidade = 1;
+  quantity = 1;
+  formaPagamento = 'Numerário';
+
+  readonly formasPagamento = ['Numerário', 'Multicaixa', 'Transferência Bancária'];
 
   cart: ItemSale[] = [];
 
-  /** Taxa de IVA aplicada em Angola */
   readonly IVA_RATE = 0.14;
 
   isSaving = false;
@@ -44,7 +51,9 @@ export class SalesComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private productService: ProductService,
-    private saleService: SaleService
+    private saleService: SaleService,
+    private itemSaleService: ItemSaleService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -66,11 +75,10 @@ export class SalesComponent implements OnInit {
     });
   }
 
-  /** Adiciona o produto selecionado ao carrinho, validando stock disponível */
   addToCart(): void {
     this.errorMessage = '';
 
-    if (!this.selectedProductId || this.quantidade <= 0) {
+    if (!this.selectedProductId || this.quantity <= 0) {
       this.errorMessage = 'Selecione um produto e indique uma quantidade válida.';
       return;
     }
@@ -81,54 +89,48 @@ export class SalesComponent implements OnInit {
       return;
     }
 
-    // Quantidade já existente no carrinho para este produto (evita ultrapassar o stock)
-    const existing = this.cart.find((i) => i.product_id === product.id);
+    const existing = this.cart.find((i) => i.produtoID === product.id);
     const quantidadeJaNoCarrinho = existing ? existing.quantidade : 0;
 
-    if (this.quantidade + quantidadeJaNoCarrinho > (product.stock ?? 0)) {
-      this.errorMessage = `Stock insuficiente para "${product.name}". Disponível: ${product.stock}`;
+    if (this.quantity + quantidadeJaNoCarrinho > (product.stockAtual ?? 0)) {
+      this.errorMessage = `Stock insuficiente para "${product.nome}". Disponível: ${product.stockAtual}`;
       return;
     }
 
     if (existing) {
-      existing.quantidade += this.quantidade;
-      existing.subtotal = existing.quantidade * existing.unit_price;
+      existing.quantidade += this.quantity;
+      existing.subtotal = existing.quantidade * existing.precoUnitario;
     } else {
       this.cart.push({
-        product_id: product.id!,
-        product_name: product.name,
-        quantidade: this.quantidade,
-        unit_price: product.price,
-        subtotal: this.quantidade * product.price
+        produtoID: product.id!,
+        productName: product.nome,
+        quantidade: this.quantity,
+        precoUnitario: product.precoVenda,
+        subtotal: this.quantity * product.precoVenda
       });
     }
 
-    // Repõe os campos de seleção
     this.selectedProductId = null;
-    this.quantidade = 1;
+    this.quantity = 1;
   }
 
   removeFromCart(index: number): void {
     this.cart.splice(index, 1);
   }
 
-  /** Total Bruto = soma das quantidades × preço unitário */
   get totalBruto(): number {
-    return this.cart.reduce((sum, item) => sum + item.subtotal, 0);
+    return this.cart.reduce((sum, item) => sum + (item.subtotal ?? 0), 0);
   }
 
-  /** IVA (14%) sobre o Total Bruto */
   get iva(): number {
     return this.totalBruto * this.IVA_RATE;
   }
 
-  /** Total Líquido = Total Bruto + IVA */
   get totalLiquido(): number {
     return this.totalBruto + this.iva;
   }
 
-  /** Envia a venda estruturada para a API */
-  finalizarVenda(): void {
+  async finalizarVenda(): Promise<void> {
     this.errorMessage = '';
     this.successMessage = '';
 
@@ -141,28 +143,60 @@ export class SalesComponent implements OnInit {
       return;
     }
 
-    const sale: Sale = {
-      customer_id: this.selectedCustomerId,
-      total_bruto: this.totalBruto,
-      iva: this.iva,
-      total_liquido: this.totalLiquido,
-      items: this.cart
-    };
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      this.errorMessage = 'Sessão inválida. Inicia sessão novamente.';
+      return;
+    }
 
     this.isSaving = true;
-    this.saleService.create(sale).subscribe({
-      next: () => {
-        this.successMessage = 'Venda registada com sucesso!';
-        this.cart = [];
-        this.selectedCustomerId = null;
-        this.isSaving = false;
-        this.loadProducts(); // Atualiza o stock exibido após a venda
-      },
-      error: (err) => {
-        console.error('Erro ao finalizar venda:', err);
-        this.errorMessage = 'Ocorreu um erro ao finalizar a venda. Tente novamente.';
-        this.isSaving = false;
+
+    const sale: Sale = {
+      formaPagamento: this.formaPagamento,
+      clienteID: this.selectedCustomerId,
+      totalVenda: this.totalBruto,
+      valorIVA: this.iva,
+      utilizadorID: currentUser.id,
+      dataVenda: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      totalLiquido: this.totalLiquido
+    };
+
+    try {
+      // 1) Cria o cabeçalho da venda
+      const createdSale = await this.saleService.create(sale).toPromise();
+      const vendaId = createdSale!.id!;
+
+      // 2) Cria cada item da venda associado ao vendaID devolvido
+      for (const item of this.cart) {
+        await this.itemSaleService.create({
+          vendaID: vendaId,
+          produtoID: item.produtoID,
+          quantidade: item.quantidade,
+          precoUnitario: item.precoUnitario
+        }).toPromise();
       }
-    });
+
+      // 3) Atualiza o stock de cada produto vendido
+      for (const item of this.cart) {
+        const product = this.products.find((p) => p.id === item.produtoID);
+        if (!product) continue;
+
+        const produtoAtualizado: Product = {
+          ...product,
+          stockAtual: product.stockAtual - item.quantidade
+        };
+        await this.productService.update(product.id!, produtoAtualizado).toPromise();
+      }
+
+      this.successMessage = `Venda #${vendaId} registada com sucesso!`;
+      this.cart = [];
+      this.selectedCustomerId = null;
+      this.loadProducts(); // Atualiza o stock exibido
+    } catch (err) {
+      console.error('Erro ao finalizar venda:', err);
+      this.errorMessage = 'Ocorreu um erro ao finalizar a venda. Verifica a consola — a venda pode ter ficado parcialmente registada.';
+    } finally {
+      this.isSaving = false;
+    }
   }
 }

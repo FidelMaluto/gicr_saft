@@ -10,7 +10,6 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'Sistema de Gestão de Inventário e Vendas';
 
-  // Público para poder ser usado diretamente no template (*ngIf="authService.isLoggedIn()")
   constructor(public authService: AuthService) {}
 
   logout(): void {

@@ -1,15 +1,15 @@
 /**
- * Modelo de dados do Produto (item de inventário).
- * Corresponde à tabela/coleção "products" no back-end.
+ * Modelo de dados do Produto.
+ * Corresponde exatamente à tabela `produtos` (controllers/product.js).
  */
 export interface Product {
   id?: number;
-  nome: string;         // Nome/descrição curta do produto
-  codigoBarra: number;         // Preço unitário (Kz) sem IVA
-  precoVenda: number;         // Quantidade disponível em inventário
-  stockAtual: number;  // Descrição detalhada (opcional)
+  nome: string;
+  codigoBarra?: string;
+  precoVenda: number;     // Preço de venda ao público (sem IVA)
+  stockAtual: number;
   stockMinimo: number;
   precoCusto: number;
-  regimeIVA: number;
-  estado?: string;
+  regimeIVA: string;      // Ex.: 'Regime Geral', 'Isento', 'Regime Simplificado'
+  estado: string;         // Ex.: 'Ativo', 'Inativo'
 }

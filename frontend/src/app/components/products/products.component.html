@@ -22,18 +22,30 @@
         <thead class="table-light">
           <tr>
             <th>Nome</th>
-            <th class="text-end">Preço (Kz)</th>
+            <th>Cód. Barras</th>
+            <th class="text-end">Preço Venda (Kz)</th>
+            <th class="text-end">Preço Custo (Kz)</th>
             <th class="text-end">Stock</th>
+            <th>Regime IVA</th>
+            <th>Estado</th>
             <th class="text-end">Ações</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let product of products">
             <td>{{ product.nome }}</td>
+            <td>{{ product.codigoBarra }}</td>
             <td class="text-end">{{ product.precoVenda | number:'1.2-2' }}</td>
+            <td class="text-end">{{ product.precoCusto | number:'1.2-2' }}</td>
             <td class="text-end">
-              <span class="badge" [ngClass]="product.stockAtual > 0 ? 'bg-success' : 'bg-danger'">
+              <span class="badge" [ngClass]="product.stockAtual > product.stockMinimo ? 'bg-success' : 'bg-danger'">
                 {{ product.stockAtual }}
+              </span>
+            </td>
+            <td>{{ product.regimeIVA }}</td>
+            <td>
+              <span class="badge" [ngClass]="product.estado === 'Ativo' ? 'bg-primary' : 'bg-secondary'">
+                {{ product.estado }}
               </span>
             </td>
             <td class="text-end">
@@ -48,7 +60,7 @@
             </td>
           </tr>
           <tr *ngIf="products.length === 0">
-            <td colspan="4" class="text-center text-muted py-4">Nenhum produto registado.</td>
+            <td colspan="8" class="text-center text-muted py-4">Nenhum produto registado.</td>
           </tr>
         </tbody>
       </table>
@@ -58,7 +70,7 @@
 
 <!-- Modal: Novo / Editar Produto -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ isEditing ? 'Editar Produto' : 'Novo Produto' }}</h5>
@@ -66,37 +78,46 @@
       </div>
       <div class="modal-body">
         <form>
-          <div class="mb-3">
-            <label class="form-label">Nome</label>
-            <input type="text" class="form-control" [(ngModel)]="newProduct.nome" name="nome" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Descrição</label>
-            <input class="form-control" [(ngModel)]="newProduct.codigoBarra" name="codigoBarra" rows="2">
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label class="form-label">Nome</label>
+              <input type="text" class="form-control" [(ngModel)]="newProduct.nome" name="nome" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Código de Barras</label>
+              <input type="text" class="form-control" [(ngModel)]="newProduct.codigoBarra" name="codigoBarra">
+            </div>
           </div>
           <div class="row">
-            <div class="col-6 mb-3">
-              <label class="form-label">Preço - Venda (Kz)</label>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Preço de Venda (Kz)</label>
               <input type="number" class="form-control" [(ngModel)]="newProduct.precoVenda" name="precoVenda" min="0" step="0.01">
             </div>
-            <div class="col-6 mb-3">
-              <label class="form-label">Stock-Atual</label>
-              <input type="number" class="form-control" [(ngModel)]="newProduct.stockAtual" name="stockAtual" min="0">
-            </div>
-            <div class="col-6 mb-3">
-              <label class="form-label">Stock-Mínimo</label>
-              <input type="number" class="form-control" [(ngModel)]="newProduct.stockMinimo" name="stockMinimo" min="0">
-            </div>
-            <div class="col-6 mb-3">
-              <label class="form-label">Preço - Custo (Kz)</label>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Preço de Custo (Kz)</label>
               <input type="number" class="form-control" [(ngModel)]="newProduct.precoCusto" name="precoCusto" min="0" step="0.01">
             </div>
-            <div class="col-6 mb-3">
-              <label class="form-label">Regime - IVA</label>
-              <input type="number" class="form-control" [(ngModel)]="newProduct.regimeIVA" name="regimeIVA" min="0" step="0.01">
-            </div><div class="col-6 mb-3">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Regime de IVA</label>
+              <select class="form-select" [(ngModel)]="newProduct.regimeIVA" name="regimeIVA">
+                <option *ngFor="let r of regimesIVA" [value]="r">{{ r }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Stock Atual</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.stockAtual" name="stockAtual" min="0">
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Stock Mínimo</label>
+              <input type="number" class="form-control" [(ngModel)]="newProduct.stockMinimo" name="stockMinimo" min="0">
+            </div>
+            <div class="col-md-4 mb-3">
               <label class="form-label">Estado</label>
-              <input type="text" class="form-control" [(ngModel)]="newProduct.estado" name="estado" min="0" step="0.01">
+              <select class="form-select" [(ngModel)]="newProduct.estado" name="estado">
+                <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+              </select>
             </div>
           </div>
         </form>

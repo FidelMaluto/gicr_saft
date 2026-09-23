@@ -1,21 +1,19 @@
-import { ItemSale } from './item-sale.model';
-
 /**
- * Modelo de dados da Venda.
- * Corresponde à tabela/coleção "sales" no back-end.
+ * Modelo de dados da Venda (cabeçalho).
+ * Corresponde exatamente à tabela `vendas` (controllers/sale.js).
  *
  * Regra de negócio (Angola):
- *  - total_bruto  = soma de (quantidade * preço unitário) de todos os itens
- *  - iva          = total_bruto * 0.14  (taxa de IVA de 14%)
- *  - total_liquido = total_bruto + iva
+ *  - totalVenda   = soma de (quantidade * precoUnitario) de todos os itens (Total Bruto)
+ *  - valorIVA     = totalVenda * 0.14  (taxa de IVA de 14%)
+ *  - totalLiquido = totalVenda + valorIVA
  */
 export interface Sale {
   id?: number;
-  formaPagamento?: string;
-  clienteID?: number;          // Definido pelo back-end (ou opcionalmente enviado pelo front)
-  totalVenda: number;
+  formaPagamento: string;   // Ex.: 'Numerário', 'Multicaixa', 'Transferência'
+  clienteID: number;
+  totalVenda: number;        // Total Bruto
   valorIVA: number;
-  utilizadorID: number;
-  dataVenda?: string;
+  utilizadorID: number;      // Utilizador autenticado que registou a venda
+  dataVenda: string;         // formato 'YYYY-MM-DD HH:mm:ss'
   totalLiquido: number;
 }

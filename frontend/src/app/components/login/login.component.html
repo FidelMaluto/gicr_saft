@@ -12,7 +12,7 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Password</label>
-          <input type="password" class="form-control" [(ngModel)]="senhaCifrada" name="senhaCifrada" required>
+          <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
         </div>
         <button type="submit" class="btn btn-primary w-100" [disabled]="isLoading">
           <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>

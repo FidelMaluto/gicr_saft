@@ -11,19 +11,29 @@
   </div>
 
   <div class="row g-4">
-    <!-- Coluna esquerda: seleção de cliente e produtos -->
+    <!-- Coluna esquerda -->
     <div class="col-lg-7">
 
       <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">Cliente</div>
+        <div class="card-header bg-primary text-white">Cliente &amp; Pagamento</div>
         <div class="card-body">
-          <label class="form-label">Selecione o cliente</label>
-          <select class="form-select" [(ngModel)]="selectedCustomerId" name="customer">
-            <option [ngValue]="null" disabled>-- Selecione um cliente --</option>
-            <option *ngFor="let c of customers" [ngValue]="c.id">
-              {{ c.nome }} (NIF: {{ c.nif }})
-            </option>
-          </select>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Cliente</label>
+              <select class="form-select" [(ngModel)]="selectedCustomerId" name="customer">
+                <option [ngValue]="null" disabled>-- Selecione um cliente --</option>
+                <option *ngFor="let c of customers" [ngValue]="c.id">
+                  {{ c.nome }} (NIF: {{ c.nif }})
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Forma de Pagamento</label>
+              <select class="form-select" [(ngModel)]="formaPagamento" name="formaPagamento">
+                <option *ngFor="let fp of formasPagamento" [value]="fp">{{ fp }}</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -42,12 +52,10 @@
             </div>
             <div class="col-md-3">
               <label class="form-label">Quantidade</label>
-              <input type="number" class="form-control" [(ngModel)]="quantidade" name="quantity" min="1">
+              <input type="number" class="form-control" [(ngModel)]="quantity" name="quantity" min="1">
             </div>
             <div class="col-md-3">
-              <button class="btn btn-success w-100" (click)="addToCart()">
-                Adicionar
-              </button>
+              <button class="btn btn-success w-100" (click)="addToCart()">Adicionar</button>
             </div>
           </div>
         </div>
@@ -55,7 +63,7 @@
 
     </div>
 
-    <!-- Coluna direita: carrinho e totais -->
+    <!-- Coluna direita -->
     <div class="col-lg-5">
       <div class="card shadow-sm">
         <div class="card-header bg-dark text-white">Carrinho de Compras</div>
@@ -74,14 +82,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of cart; let i = index">
-                  <!-- <td>{{ item.product_name }}</td> -->
+                  <td>{{ item.productName }}</td>
                   <td class="text-end">{{ item.quantidade }}</td>
                   <td class="text-end">{{ item.precoUnitario | number:'1.2-2' }}</td>
-                  <!-- <td class="text-end">{{ item.subtotal | number:'1.2-2' }}</td> -->
+                  <td class="text-end">{{ item.subtotal | number:'1.2-2' }}</td>
                   <td class="text-end">
-                    <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(i)" title="Remover">
-                      &times;
-                    </button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(i)" title="Remover">&times;</button>
                   </td>
                 </tr>
                 <tr *ngIf="cart.length === 0">

@@ -2,12 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
-/**
- * Componente de Gestão de Utilizadores.
- * Lista os utilizadores numa tabela Bootstrap e permite criar/editar/eliminar
- * através de um modal. Por segurança, a password nunca é pré-preenchida ao
- * editar, e só é enviada ao back-end se o campo for explicitamente alterado.
- */
 @Component({
   selector: 'app-users',
   standalone: false,
@@ -17,12 +11,17 @@ import { UserService } from '../../services/user.service';
 export class UsersComponent implements OnInit {
   users: User[] = [];
 
+  readonly cargos = ['Administrador', 'Gerente', 'Vendedor'];
+
   newUser: User = this.emptyUser();
+  plainPassword = '';
   isEditing = false;
   editingId: number | null = null;
+  currentSenhaCifrada = '';
 
   successMessage = '';
   errorMessage = '';
+  isSaving = false;
 
   constructor(private userService: UserService) {}
 
@@ -38,58 +37,54 @@ export class UsersComponent implements OnInit {
   }
 
   private emptyUser(): User {
-    return { nome: '', email: '', senhaCifrada: '', cargo: 'vendedor' };
+    return { nome: '', email: '', cargo: 'Vendedor' };
   }
 
   openNewUserModal(): void {
     this.isEditing = false;
     this.editingId = null;
     this.newUser = this.emptyUser();
+    this.plainPassword = '';
+    this.currentSenhaCifrada = '';
   }
 
   editUser(user: User): void {
     this.isEditing = true;
     this.editingId = user.id ?? null;
-    // Não pré-preenchemos a password por segurança — fica vazia até o utilizador decidir alterá-la
-    this.newUser = { ...user, senhaCifrada: '' };
+    this.newUser = { ...user };
+    this.currentSenhaCifrada = user.senhaCifrada ?? '';
+    this.plainPassword = ''; // Nunca é pré-preenchida por segurança
   }
 
-  saveUser(): void {
+  async saveUser(): Promise<void> {
     this.errorMessage = '';
 
     if (!this.newUser.nome || !this.newUser.email) {
       this.errorMessage = 'Nome e email são obrigatórios.';
       return;
     }
-    if (!this.isEditing && !this.newUser.senhaCifrada) {
+    if (!this.isEditing && !this.plainPassword) {
       this.errorMessage = 'A password é obrigatória para novos utilizadores.';
       return;
     }
 
-    if (this.isEditing && this.editingId) {
-      // Se a password ficou vazia durante a edição, não a enviamos (mantém a atual no back-end)
-      const payload: User = { ...this.newUser };
-      if (!payload.senhaCifrada) {
-        delete payload.senhaCifrada;
-      }
+    this.isSaving = true;
 
-      this.userService.update(this.editingId, payload).subscribe({
-        next: () => {
-          this.successMessage = 'Utilizador atualizado com sucesso!';
-          this.loadUsers();
-          this.resetForm();
-        },
-        error: (err) => this.handleError(err)
-      });
-    } else {
-      this.userService.create(this.newUser).subscribe({
-        next: () => {
-          this.successMessage = 'Utilizador criado com sucesso!';
-          this.loadUsers();
-          this.resetForm();
-        },
-        error: (err) => this.handleError(err)
-      });
+    try {
+      if (this.isEditing && this.editingId) {
+        await this.userService.update(this.editingId, this.newUser, this.plainPassword || null, this.currentSenhaCifrada);
+        this.successMessage = 'Utilizador atualizado com sucesso!';
+      } else {
+        await this.userService.create(this.newUser, this.plainPassword);
+        this.successMessage = 'Utilizador criado com sucesso!';
+      }
+      this.loadUsers();
+      this.resetForm();
+    } catch (err) {
+      console.error(err);
+      this.errorMessage = 'Ocorreu um erro ao processar o pedido.';
+    } finally {
+      this.isSaving = false;
     }
   }
 
@@ -102,18 +97,18 @@ export class UsersComponent implements OnInit {
         this.successMessage = 'Utilizador eliminado com sucesso.';
         this.loadUsers();
       },
-      error: (err) => this.handleError(err)
+      error: (err) => {
+        console.error(err);
+        this.errorMessage = 'Ocorreu um erro ao eliminar o utilizador.';
+      }
     });
   }
 
   private resetForm(): void {
     this.newUser = this.emptyUser();
+    this.plainPassword = '';
+    this.currentSenhaCifrada = '';
     this.isEditing = false;
     this.editingId = null;
-  }
-
-  private handleError(err: any): void {
-    console.error(err);
-    this.errorMessage = 'Ocorreu um erro ao processar o pedido.';
   }
 }

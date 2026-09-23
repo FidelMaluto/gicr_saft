@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Customer } from '../../models/customer.model';
 import { CustomerService } from '../../services/customer.service';
 
-/**
- * Componente de Gestão de Clientes.
- * Lista os clientes (com NIF) numa tabela Bootstrap e permite
- * cadastrar novos clientes através de um formulário lateral.
- */
 @Component({
   selector: 'app-customers',
   standalone: false,
