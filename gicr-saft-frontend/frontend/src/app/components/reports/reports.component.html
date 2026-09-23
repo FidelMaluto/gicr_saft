@@ -1,0 +1,116 @@
+<div class="container-fluid py-4">
+  <h2 class="mb-4">Relatórios — SAF-T (Simplificado)</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">Dados da Empresa &amp; Período</div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Nome da Empresa</label>
+          <input type="text" class="form-control" [(ngModel)]="empresaNome" name="empresaNome">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">NIF</label>
+          <input type="text" class="form-control" [(ngModel)]="empresaNIF" name="empresaNIF">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Data Início</label>
+          <input type="date" class="form-control" [(ngModel)]="dataInicio" name="dataInicio" (change)="aplicarFiltro()">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Data Fim</label>
+          <input type="date" class="form-control" [(ngModel)]="dataFim" name="dataFim" (change)="aplicarFiltro()">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-outline-secondary w-100" (click)="aplicarFiltro()">Filtrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="text-muted mt-2">A carregar dados...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Totais -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">Nº de Vendas</div>
+            <div class="fs-4 fw-bold">{{ filteredSales.length }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">Total Bruto</div>
+            <div class="fs-4 fw-bold">{{ totalBruto | number:'1.2-2' }} Kz</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">IVA (14%)</div>
+            <div class="fs-4 fw-bold">{{ totalIVA | number:'1.2-2' }} Kz</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">Total Líquido</div>
+            <div class="fs-4 fw-bold text-primary">{{ totalLiquido | number:'1.2-2' }} Kz</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+      <button class="btn btn-success" (click)="gerarPDF()" [disabled]="filteredSales.length === 0">
+        Gerar Relatório SAF-T (PDF)
+      </button>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Nº</th>
+              <th>Data</th>
+              <th>Cliente</th>
+              <th>Forma Pagamento</th>
+              <th class="text-end">Total Bruto</th>
+              <th class="text-end">IVA (14%)</th>
+              <th class="text-end">Total Líquido</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let venda of filteredSales">
+              <td>{{ venda.id }}</td>
+              <td>{{ venda.dataVenda | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ getCustomerName(venda.clienteID) }}</td>
+              <td>{{ venda.formaPagamento }}</td>
+              <td class="text-end">{{ venda.totalVenda | number:'1.2-2' }}</td>
+              <td class="text-end">{{ venda.valorIVA | number:'1.2-2' }}</td>
+              <td class="text-end">{{ venda.totalLiquido | number:'1.2-2' }}</td>
+            </tr>
+            <tr *ngIf="filteredSales.length === 0">
+              <td colspan="7" class="text-center text-muted py-4">Nenhuma venda no período selecionado.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
