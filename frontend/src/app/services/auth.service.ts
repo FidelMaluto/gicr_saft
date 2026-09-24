@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
@@ -7,13 +7,12 @@ import { AuthenticatedUser, LoginRequest, LoginResponse } from '../models/auth.m
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
 
-/**
- * Serviço de autenticação.
- *
- * Consome o endpoint POST /Login que precisa de ser acrescentado ao
- * back-end (código pronto na pasta backend-addon/ deste pacote).
- * Guarda o token JWT e o utilizador em localStorage, e expõe helpers
- * usados pelo AuthGuard e pelo AuthInterceptor.
+/* Serviço de autenticação.
+ 
+  Consome o endpoint POST /Login que precisa de ser acrescentado ao
+  back-end (código pronto na pasta backend-addon/ deste pacote).
+  Guarda o token JWT e o utilizador em localStorage, e expõe helpers
+  usados pelo AuthGuard e pelo AuthInterceptor.
  */
 @Injectable({ providedIn: 'root' })
 export class AuthService {

@@ -3,12 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Customer } from '../models/customer.model';
 
-/**
- * Comunicação com routes/customers.js:
- *   GET    /Clientes
- *   POST   /Cliente
- *   PUT    /Cliente/:id
- *   DELETE /Cliente/:id
+/* Comunicação com routes/customers.js:
+    GET    /Clientes
+    POST   /Cliente
+    PUT    /Cliente/:id
+    DELETE /Cliente/:id
  */
 @Injectable({ providedIn: 'root' })
 export class CustomerService {

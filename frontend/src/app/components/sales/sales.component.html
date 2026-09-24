@@ -87,7 +87,8 @@
                   <td class="text-end">{{ item.precoUnitario | number:'1.2-2' }}</td>
                   <td class="text-end">{{ item.subtotal | number:'1.2-2' }}</td>
                   <td class="text-end">
-                    <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(i)" title="Remover">&times;</button>
+                    <button class="btn btn-sm btn-outline-danger" (click)="removeFromCart(i)"
+                      title="Remover">&times;</button>
                   </td>
                 </tr>
                 <tr *ngIf="cart.length === 0">

@@ -3,13 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ItemSale } from '../models/item-sale.model';
 
-/**
- * Comunicação com routes/itemSales.js:
- *   GET    /ItensVenda
- *   POST   /ItensVenda   (note o plural mesmo no POST — assim está definido
- *                          na tua rota, ao contrário de /Cliente, /Produto, etc.)
- *   PUT    /ItensVenda/:id
- *   DELETE /ItensVenda/:id
+/* Comunicação com routes/itemSales.js:
+    GET /ItensVenda
+    POST /ItensVenda (note o plural mesmo no POST — assim está definido na tua rota, ao contrário de /Cliente, /Produto, etc.)
+    PUT  /ItensVenda/:id
+    DELETE /ItensVenda/:id
  */
 @Injectable({ providedIn: 'root' })
 export class ItemSaleService {

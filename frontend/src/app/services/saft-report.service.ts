@@ -18,15 +18,14 @@ export interface SaftReportData {
   produtos: Product[];
 }
 
-/**
- * Gera um Relatório SAF-T (simplificado) em PDF, a partir dos dados de
- * vendas do período selecionado.
- *
- * IMPORTANTE: este é um relatório de auditoria em PDF para consulta
- * humana (lista de faturas, totais e IVA), inspirado na estrutura do
- * SAF-T angolano — NÃO é o ficheiro XML oficial SAF-T-AO exigido pela
- * AGT para submissão eletrónica. Gerar o XML oficial exigiria mapear
- * o schema completo definido pela Administração Geral Tributária.
+/* Gera um Relatório SAF-T (simplificado) em PDF, a partir dos dados de
+  vendas do período selecionado.
+ 
+  IMPORTANTE: este é um relatório de auditoria em PDF para consulta
+  humana (lista de faturas, totais e IVA), inspirado na estrutura do
+  SAF-T angolano — NÃO é o ficheiro XML oficial SAF-T-AO exigido pela
+  AGT para submissão eletrónica. Gerar o XML oficial exigiria mapear
+  o schema completo definido pela Administração Geral Tributária.
  */
 @Injectable({ providedIn: 'root' })
 export class SaftReportService {

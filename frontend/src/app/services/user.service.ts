@@ -4,17 +4,16 @@ import { Observable } from 'rxjs';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../models/user.model';
 
-/**
- * Comunicação com routes/users.js:
- *   GET    /Utilizadores
- *   POST   /Utilizador
- *   PUT    /Utilizador/:id
- *   DELETE /Utilizador/:id
- *
- * IMPORTANTE: o controller CreateUser/EditUser no back-end grava
- * diretamente o valor recebido no campo `senhaCifrada` — não faz o
- * hash. Por isso este serviço cifra a password no cliente com
- * bcryptjs antes de enviar, para nunca guardar texto simples na BD.
+/* Comunicação com routes/users.js:
+  GET  /Utilizadores
+  POST /Utilizador
+  PUT  /Utilizador/:id
+  DELETE /Utilizador/:id
+ 
+  IMPORTANTE: o controller CreateUser/EditUser no back-end grava
+  diretamente o valor recebido no campo `senhaCifrada` — não faz o
+  hash. Por isso este serviço cifra a password no cliente com
+  bcryptjs antes de enviar, para nunca guardar texto simples na BD.
  */
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -34,9 +33,9 @@ export class UserService {
     return this.http.post<User>(`${this.apiUrl}/Utilizador`, payload).toPromise() as Promise<User>;
   }
 
-  /**
-   * Atualiza um utilizador. Se plainPassword for fornecida, cifra e substitui
-   * a senha; caso contrário, mantém a senha atual (currentSenhaCifrada).
+  /*
+    Atualiza um utilizador. Se plainPassword for fornecida, cifra e substitui
+    a senha; caso contrário, mantém a senha atual (currentSenhaCifrada).
    */
   async update(id: number, user: User, plainPassword: string | null, currentSenhaCifrada: string): Promise<User> {
     const senhaCifrada = plainPassword

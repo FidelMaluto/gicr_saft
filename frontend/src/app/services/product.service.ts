@@ -3,12 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../models/product.model';
 
-/**
- * Comunicação com routes/products.js:
- *   GET    /Produtos
- *   POST   /Produto
- *   PUT    /Produto/:id
- *   DELETE /Produto/:id
+/* Comunicação com routes/products.js:
+    GET    /Produtos
+    POST   /Produto
+    PUT    /Produto/:id
+    DELETE /Produto/:id
  */
 @Injectable({ providedIn: 'root' })
 export class ProductService {

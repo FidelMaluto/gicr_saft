@@ -3,13 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Sale } from '../models/sale.model';
 
-/**
- * Comunicação com routes/sales.js:
- *   GET    /Vendas
- *   POST   /Venda   (cria APENAS o cabeçalho da venda — os itens vão
- *                     separadamente para /ItensVenda, ver ItemSaleService)
- *   PUT    /Venda/:id
- *   DELETE /Venda/:id
+/* Comunicação com routes/sales.js:
+    GET /Vendas
+    POST /Venda (cria APENAS o cabeçalho da venda — os itens vão separadamente para /ItensVenda, ver ItemSaleService)
+    PUT /Venda/:id
+    DELETE /Venda/:id
  */
 @Injectable({ providedIn: 'root' })
 export class SaleService {

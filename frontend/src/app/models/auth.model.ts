@@ -1,7 +1,6 @@
-/**
- * Modelos relacionados com autenticação.
- * Corresponde ao endpoint POST /Login que precisa de ser acrescentado
- * ao back-end (ver pasta backend-addon/ neste mesmo pacote).
+/* Modelos relacionados com autenticação.
+  Corresponde ao endpoint POST /Login que precisa de ser acrescentado
+  ao back-end (ver pasta backend-addon/ neste mesmo pacote).
  */
 export interface LoginRequest {
   email: string;
