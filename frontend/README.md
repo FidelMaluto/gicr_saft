@@ -1,9 +1,8 @@
 # Front-end — Sistema de Gestão de Inventário e Vendas (Angular + Bootstrap)
 
-Front-end completo, gerado e **compilado com sucesso** (`ng build`) contra o
-back-end real fornecido (Node.js + Express + MySQL), incluindo:
+Front-end completo, gerado e **compilado com sucesso** (`ng build`) 
 
-- Login com JWT (requer a rota adicionada — ver `backend-addon/` no pacote)
+- Login com JWT (requer a rota adicionada no pacote)
 - Ponto de Venda (PDV) com cálculo automático de IVA (14%)
 - Gestão de Produtos, Clientes e Utilizadores
 - Relatório SAF-T (simplificado) em PDF, por período
@@ -14,12 +13,7 @@ cd frontend
 npm install
 ```
 
-## 2. Configurar o back-end (obrigatório)
-Este front-end assume que o teu back-end já tem a rota `POST /Login`.
-Segue as instruções em `backend-addon/COMO-INTEGRAR.md` (na raiz deste
-pacote) antes de continuares — são 4 passos rápidos.
-
-## 3. Correr os dois lados
+## 2. Correr os dois lados
 ```bash
 # Terminal 1 — back-end
 cd backend
@@ -61,9 +55,7 @@ src/app/
     └── saft-report.service.ts → Gera o PDF do relatório (jsPDF + autoTable)
 ```
 
-## Pontos importantes sobre a integração com o teu back-end real
-
-### Rotas (em português, exatamente como no teu código)
+### Rotas
 | Recurso    | GET            | POST          | PUT                | DELETE             |
 |------------|----------------|---------------|---------------------|---------------------|
 | Clientes   | `/Clientes`    | `/Cliente`    | `/Cliente/:id`       | `/Cliente/:id`       |
@@ -74,10 +66,6 @@ src/app/
 | Login (novo)| —             | `/Login`      | —                    | —                    |
 
 ### Finalizar uma venda é 3 pedidos em sequência
-O teu back-end não tem uma rota única "criar venda com itens" — o cabeçalho
-(`/Venda`) e cada item (`/ItensVenda`) são recursos separados, e não existe
-nenhum trigger/procedure a decrementar o stock. Por isso, `sales.component.ts`
-faz, nesta ordem, ao clicar em "Finalizar Venda":
 1. `POST /Venda` → cria o cabeçalho, obtém o `id`
 2. `POST /ItensVenda` (um por produto no carrinho)
 3. `PUT /Produto/:id` (um por produto, com `stockAtual` decrementado)
@@ -87,19 +75,6 @@ passo 2 ou 3 falhar a meio, a venda pode ficar parcialmente registada — o
 ecrã avisa nesse caso. Para produção, o ideal é mover esta lógica para uma
 única rota no back-end com uma transação SQL (`START TRANSACTION` /
 `COMMIT` / `ROLLBACK`).
-
-### Password / autenticação
-- `CreateUser`/`EditUser` no teu back-end gravam o que receberem, tal e
-  qual, no campo `senhaCifrada` — não fazem hash.
-- Por isso, `user.service.ts` no front-end cifra a password com
-  **bcryptjs** (mesma biblioteca já no teu `package.json` do back-end)
-  antes de enviar, para nunca gravar texto simples.
-- O `POST /Login` (que vais acrescentar — ver `backend-addon/`) usa
-  `bcrypt.compare()` para validar e `jsonwebtoken` para emitir o token.
-- O token é guardado em `localStorage` e reenviado automaticamente em
-  todos os pedidos pelo `AuthInterceptor`. As tuas rotas atuais ainda não
-  o validam — fica pronto para quando adicionares um middleware de
-  autenticação no Express.
 
 ### Relatório SAF-T em PDF
 O botão "Gerar Relatório SAF-T (PDF)" (dentro de **Relatórios**) usa
@@ -112,17 +87,15 @@ período selecionado e gera um PDF com: cabeçalho da empresa, totais
 humana — **não é** o ficheiro XML oficial SAF-T-AO que a AGT exige para
 submissão eletrónica. Gerar esse XML implicaria mapear o schema completo
 definido pela Administração Geral Tributária angolana, o que é um projeto
-à parte caso venhas a precisar dele no futuro.
+à parte caso venho a precisar dele no futuro.
 
 ### Regime de IVA por produto
-O teu campo `regimeIVA` (por produto) sugere que, no futuro, diferentes
+O campo `regimeIVA` (por produto) sugere que, no futuro, diferentes
 produtos podem ter tratamentos fiscais diferentes (isentos, taxa reduzida,
 etc.). Para manter o âmbito controlado, o cálculo de IVA no PDV e no
 relatório usa, por agora, uma taxa única de 14% sobre o total — a mesma
-regra usada em toda a aplicação. Se precisares de IVA por produto/regime,
-digo-te como adaptar o `sales.component.ts` e o `saft-report.service.ts`.
+regra usada em toda a aplicação.
 
 ## Validação
 Este projeto foi gerado com `ng new --standalone=false` (Angular 19.2),
 `npm install` executado e `ng build --configuration development`
-**concluído sem erros** antes de ser empacotado.

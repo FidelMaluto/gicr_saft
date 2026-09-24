@@ -10,7 +10,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'Sistema de Gestão de Inventário e Vendas';
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService) { }
 
   logout(): void {
     this.authService.logout();
