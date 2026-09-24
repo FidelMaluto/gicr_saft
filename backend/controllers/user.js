@@ -40,12 +40,7 @@ export const CreateUser = async (req, res) => {
             // 3. Retorna os dados SEM expor a password/hash na resposta
             return res.status(201).json({
                 message: 'Utilizador criado com sucesso!',
-                user: {
-                    id: data.insertId,
-                    nome,
-                    email,
-                    cargo
-                }
+                user: { id: data.insertId, nome, email, cargo }
             });
         });
 

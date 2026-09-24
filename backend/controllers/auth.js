@@ -2,17 +2,6 @@ import { db } from '../config/db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-/**
- * Controller de autenticação.
- * Consultado por POST /Login — ver routes/auth.js.
- *
- * Fluxo:
- *  1. Procura o utilizador por email na tabela `utilizadores`.
- *  2. Compara a password recebida (texto simples) com o hash guardado
- *     em `senhaCifrada`, usando bcryptjs (mesma biblioteca já usada
- *     para cifrar no front-end ao criar/editar utilizadores).
- *  3. Se corresponder, emite um token JWT válido por 8 horas.
- */
 export const Login = async (req, res) => {
     const { email, password } = req.body;
 
