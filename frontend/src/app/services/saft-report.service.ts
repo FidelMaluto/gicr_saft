@@ -6,7 +6,7 @@ import { ItemSale } from '../models/item-sale.model';
 import { Customer } from '../models/customer.model';
 import { Product } from '../models/product.model';
 
-/** Estrutura agregada usada para montar o relatório */
+/* Estrutura agregada usada para montar o relatório */
 export interface SaftReportData {
   periodoInicio: string;
   periodoFim: string;
@@ -34,7 +34,7 @@ export class SaftReportService {
     const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     const pageWidth = doc.internal.pageSize.getWidth();
 
-    // ---------- Cabeçalho ----------
+    // Cabeçalho
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.text(data.empresaNome, 14, 15);
@@ -56,7 +56,7 @@ export class SaftReportService {
 
     doc.text(`Emitido em: ${new Date().toLocaleString('pt-PT')}`, pageWidth - 14, 15, { align: 'right' });
 
-    // ---------- Totais gerais ----------
+    // Totais gerais
     const totalBruto = data.vendas.reduce((sum, v) => sum + Number(v.totalVenda), 0);
     const totalIVA = data.vendas.reduce((sum, v) => sum + Number(v.valorIVA), 0);
     const totalLiquido = data.vendas.reduce((sum, v) => sum + Number(v.totalLiquido), 0);
@@ -75,7 +75,7 @@ export class SaftReportService {
       ]]
     });
 
-    // ---------- Tabela detalhada de vendas ----------
+    // Tabela detalhada de vendas
     const finalY1 = (doc as any).lastAutoTable.finalY + 6;
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
@@ -103,7 +103,7 @@ export class SaftReportService {
       body: vendasBody
     });
 
-    // ---------- Tabela detalhada de itens (linhas de fatura) ----------
+    // Tabela detalhada de itens (linhas de fatura)
     const finalY2 = (doc as any).lastAutoTable.finalY + 6;
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
@@ -138,7 +138,7 @@ export class SaftReportService {
       body: itensBody
     });
 
-    // ---------- Rodapé com numeração de página ----------
+    // Rodapé com numeração de página
     const totalPages = doc.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       doc.setPage(i);

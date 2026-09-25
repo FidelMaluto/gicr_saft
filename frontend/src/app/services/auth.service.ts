@@ -39,7 +39,7 @@ export class AuthService {
     return raw ? JSON.parse(raw) : null;
   }
 
-  /** Verifica se existe um token guardado e se ainda não expirou (lê o payload JWT sem validar assinatura) */
+  /* Verifica se existe um token guardado e se ainda não expirou (lê o payload JWT sem validar assinatura) */
   isLoggedIn(): boolean {
     const token = this.getToken();
     if (!token) return false;
