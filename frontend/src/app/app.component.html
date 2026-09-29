@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="authService.isLoggedIn()">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary text-white" *ngIf="authService.isLoggedIn()">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/sales">{{ title }}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -37,3 +37,7 @@
 </nav>
 
 <router-outlet></router-outlet>
+
+<footer class="text-center">
+  <p>FLEVES, 2026 &copy;</p>
+</footer>
