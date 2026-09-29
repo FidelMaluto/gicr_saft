@@ -9,19 +9,16 @@ import { SaleService } from '../../services/sale.service';
 import { ItemSaleService } from '../../services/item-sale.service';
 import { AuthService } from '../../services/auth.service';
 
-/**
- * Componente Ponto de Venda (PDV).
- *
- * Como o back-end separa a venda (tabela `vendas`) dos itens
- * (tabela `itens_venda`) em endpoints diferentes, finalizar uma venda
- * é uma operação em 3 passos, feita aqui em sequência:
- *   1. POST /Venda            -> cria o cabeçalho e devolve o `id`
- *   2. POST /ItensVenda (x N) -> cria uma linha por produto no carrinho
- *   3. PUT  /Produto/:id (xN) -> decrementa o stockAtual de cada produto
- *
- * Não há transação atómica no back-end atual — se um passo falhar a meio,
- * a venda pode ficar parcialmente registada. Fica assinalado no ecrã e
- * na consola quando isso acontece, para correção manual se necessário.
+/* Componente Ponto de Venda (PDV).
+  Como o back-end separa a venda (tabela `vendas`) dos itens
+  (tabela `itens_venda`) em endpoints diferentes, finalizar uma venda
+  é uma operação em 3 passos, feita aqui em sequência:
+    1. POST /Venda            -> cria o cabeçalho e devolve o `id`
+    2. POST /ItensVenda (x N) -> cria uma linha por produto no carrinho
+    3. PUT  /Produto/:id (xN) -> decrementa o stockAtual de cada produto
+  Não há transação atómica no back-end atual — se um passo falhar a meio,
+  a venda pode ficar parcialmente registada. Fica assinalado no ecrã e
+  na consola quando isso acontece, para correção manual se necessário.
  */
 @Component({
   selector: 'app-sales',
@@ -122,6 +119,7 @@ export class SalesComponent implements OnInit {
     return this.cart.reduce((sum, item) => sum + (item.subtotal ?? 0), 0);
   }
 
+  // Lógica do cálculo do IVA
   get iva(): number {
     return this.totalBruto * this.IVA_RATE;
   }
